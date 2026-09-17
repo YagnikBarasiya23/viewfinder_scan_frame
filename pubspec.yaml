@@ -1,0 +1,25 @@
+name: viewfinder_scan_frame
+description: "A camera scan-frame overlay for Flutter: breathing corner brackets, a sweep line, a spring lock-on to the detected region, and a shake on failure."
+version: 1.0.0
+homepage: https://yagnikbarasiya23.github.io/viewfinder_scan_frame/
+repository: https://github.com/YagnikBarasiya23/viewfinder_scan_frame
+issue_tracker: https://github.com/YagnikBarasiya23/viewfinder_scan_frame/issues
+topics: [camera, scanner, overlay, animation, widget]
+screenshots:
+  - description: "Viewfinder scanning and locked onto a plate"
+    path: screenshots/viewfinder.jpg
+
+environment:
+  sdk: ^3.13.0
+  flutter: ">=3.47.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
