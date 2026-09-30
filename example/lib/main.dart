@@ -4,6 +4,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:viewfinder_scan_frame/viewfinder_scan_frame.dart';
 
+import 'controls.dart';
+
 void main() => runApp(const ViewfinderDemo());
 
 const _bg = Color(0xFF050505);
@@ -130,30 +132,38 @@ class _DemoPageState extends State<DemoPage> {
           spacing: 8,
           runSpacing: 8,
           children: [
-            FilledButton(
-              onPressed: () => _scan(succeed: true),
-              style: FilledButton.styleFrom(backgroundColor: _accent, foregroundColor: Colors.black),
-              child: const Text('Scan'),
-            ),
-            _Outline(label: 'Scan (fail)', onTap: () => _scan(succeed: false)),
-            _Outline(label: 'Found now', onTap: () => setState(() => _status = ViewfinderStatus.locked)),
-            _Outline(label: 'Fail now', onTap: () => setState(() => _status = ViewfinderStatus.failed)),
-            _Outline(label: 'Idle', onTap: () => setState(() => _status = ViewfinderStatus.idle)),
+            PillButton(label: 'Scan', primary: true, onPressed: () => _scan(succeed: true)),
+            PillButton(label: 'Scan and fail', onPressed: () => _scan(succeed: false)),
           ],
         ),
+        const SizedBox(height: 12),
+        Segmented<ViewfinderStatus>(
+          segments: const {
+            ViewfinderStatus.idle: 'Idle',
+            ViewfinderStatus.locked: 'Found',
+            ViewfinderStatus.failed: 'Failed',
+          },
+          selected: _status,
+          onChanged: (status) => setState(() => _status = status),
+        ),
         const SizedBox(height: 28),
-        const Text(
-          'MIT © 2026 Yagnik Barasiya · github.com/YagnikBarasiya23/viewfinder_scan_frame',
-          style: TextStyle(color: _muted, fontSize: 13),
+        const SizedBox(
+          width: double.infinity,
+          child: Text(
+            'MIT © 2026 Yagnik Barasiya · github.com/YagnikBarasiya23/viewfinder_scan_frame',
+            style: TextStyle(color: _muted, fontSize: 13),
+            textAlign: TextAlign.center,
+          ),
         ),
       ],
     );
 
     return Scaffold(
       body: SafeArea(
+        bottom: false,
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 28, 20, 40),
+            padding: EdgeInsets.fromLTRB(20, 28, 20, 40 + MediaQuery.paddingOf(context).bottom),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 960),
               child: LayoutBuilder(
@@ -178,25 +188,6 @@ class _DemoPageState extends State<DemoPage> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _Outline extends StatelessWidget {
-  const _Outline({required this.label, required this.onTap});
-
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return OutlinedButton(
-      onPressed: onTap,
-      style: OutlinedButton.styleFrom(
-        foregroundColor: Colors.white,
-        side: const BorderSide(color: Color(0x38FFFFFF)),
-      ),
-      child: Text(label),
     );
   }
 }
@@ -283,7 +274,10 @@ class _TablePainter extends CustomPainter {
       canvas.save();
       canvas.translate(p.dx, p.dy);
       canvas.rotate(a + math.pi / 2);
-      canvas.drawOval(const Rect.fromLTWH(-7, -16, 14, 32), leaf..color = i.isEven ? const Color(0xFF5E9E4B) : const Color(0xFF7DB85F));
+      canvas.drawOval(
+        const Rect.fromLTWH(-7, -16, 14, 32),
+        leaf..color = i.isEven ? const Color(0xFF5E9E4B) : const Color(0xFF7DB85F),
+      );
       canvas.restore();
     }
     // Tomatoes
